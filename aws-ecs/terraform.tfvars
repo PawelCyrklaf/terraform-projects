@@ -1,1 +1,16 @@
-app_port = 80
+app_port                 = 80
+cluster_name             = "ECS_Cluster"
+task_definition_name     = "nginx_task"
+container_name           = "nginx_container"
+container_image          = "nginx:latest"
+service_name             = "ECSService"
+task_desired_count       = 2
+elb_name                 = "ECSLoadBalancer"
+elb_target_group_name    = "ECSTargetGroup"
+aws_region               = "eu-central-1"
+task_security_group_name = "ECS_Task_SG"
+elb_security_group_name  = "ECS_ELB_SG"
+vpc_name                 = "ECS_VPC"
+vpc_cidr                 = "192.170.0.0/16"
+azs                      = ["eu-central-1a", "eu-central-1b", "eu-central-1c"]
+public_subnets_cidrs     = ["192.170.0.0/24", "192.170.1.0/24", "192.170.2.0/24"]

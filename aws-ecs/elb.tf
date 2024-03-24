@@ -1,15 +1,15 @@
 resource "aws_lb" "ecs_lb" {
-  name               = "ECSLB"
+  name               = var.elb_name
   internal           = false
   load_balancer_type = "application"
-  security_groups    = [aws_security_group.alb_security_group.id]
-  subnets            = [module.vpc.public_subnets[1], module.vpc.public_subnets[0], module.vpc.public_subnets[2]]
+  security_groups    = [aws_security_group.elb_security_group.id]
+  subnets            = toset(var.public_subnets_cidrs)
 
   enable_deletion_protection = false
 }
 
 resource "aws_lb_target_group" "ecs_tg" {
-  name        = "test-tg"
+  name        = var.elb_target_group_name
   port        = var.app_port
   protocol    = "HTTP"
   target_type = "ip"

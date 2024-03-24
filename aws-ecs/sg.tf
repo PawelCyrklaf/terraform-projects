@@ -1,5 +1,5 @@
-resource "aws_security_group" "alb_security_group" {
-  name = "ALBSecurityGroup"
+resource "aws_security_group" "elb_security_group" {
+  name = var.elb_security_group_name
 
   ingress {
     from_port   = var.app_port
@@ -26,7 +26,7 @@ resource "aws_security_group" "alb_security_group" {
 }
 
 resource "aws_security_group" "task_security_group" {
-  name = "TASKSecurityGroup"
+  name = var.task_security_group_name
 
   ingress {
     from_port   = var.app_port

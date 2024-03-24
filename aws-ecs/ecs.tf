@@ -1,5 +1,5 @@
 resource "aws_ecs_cluster" "ecs_cluster" {
-  name = "ECS_Cluster"
+  name = var.cluster_name
 }
 
 resource "aws_ecs_cluster_capacity_providers" "ecs_capacity_provider" {
@@ -15,7 +15,7 @@ resource "aws_ecs_cluster_capacity_providers" "ecs_capacity_provider" {
 }
 
 resource "aws_ecs_task_definition" "nginx_task_definition" {
-  family                   = "service"
+  family                   = var.task_definition_name
   requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"
   cpu                      = 256
@@ -23,8 +23,8 @@ resource "aws_ecs_task_definition" "nginx_task_definition" {
   execution_role_arn       = "arn:aws:iam::177394270612:role/ecsTaskExecutionRole"
   container_definitions    = jsonencode([
     {
-      name        = "nginx"
-      image       = "nginx"
+      name        = var.container_name
+      image       = var.container_image
       cpu         = 256
       memory      = 512
       essential   = true
@@ -51,10 +51,10 @@ resource "aws_ecs_task_definition" "nginx_task_definition" {
 }
 
 resource "aws_ecs_service" "nginx_service" {
-  name                 = "nginx-service"
+  name                 = var.service_name
   task_definition      = aws_ecs_task_definition.nginx_task_definition.arn
   cluster              = aws_ecs_cluster.ecs_cluster.id
-  desired_count        = 2
+  desired_count        = var.task_desired_count
   launch_type          = "FARGATE"
   force_new_deployment = true
 
@@ -64,12 +64,12 @@ resource "aws_ecs_service" "nginx_service" {
 
   load_balancer {
     target_group_arn = aws_lb_target_group.ecs_tg.arn
-    container_name   = "nginx"
+    container_name   = var.container_name
     container_port   = var.app_port
   }
 
   network_configuration {
-    subnets          = [module.vpc.public_subnets[1]]
+    subnets          = toset(var.public_subnets_cidrs)
     security_groups  = [aws_security_group.task_security_group.id]
     assign_public_ip = true
   }
