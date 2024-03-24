@@ -20,7 +20,7 @@ resource "aws_ecs_task_definition" "nginx_task_definition" {
   network_mode             = "awsvpc"
   cpu                      = 256
   memory                   = 512
-  execution_role_arn       = "arn:aws:iam::177394270612:role/ecsTaskExecutionRole"
+  execution_role_arn       = aws_iam_role.ecs_tasks_execution_role.arn
   container_definitions    = jsonencode([
     {
       name        = var.container_name
@@ -69,7 +69,7 @@ resource "aws_ecs_service" "nginx_service" {
   }
 
   network_configuration {
-    subnets          = toset(var.public_subnets_cidrs)
+    subnets          = toset(module.vpc.public_subnets)
     security_groups  = [aws_security_group.task_security_group.id]
     assign_public_ip = true
   }

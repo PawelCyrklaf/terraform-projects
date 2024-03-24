@@ -3,7 +3,7 @@ resource "aws_lb" "ecs_lb" {
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.elb_security_group.id]
-  subnets            = toset(var.public_subnets_cidrs)
+  subnets            = toset(module.vpc.public_subnets)
 
   enable_deletion_protection = false
 }

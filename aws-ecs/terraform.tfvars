@@ -14,3 +14,4 @@ vpc_name                 = "ECS_VPC"
 vpc_cidr                 = "192.170.0.0/16"
 azs                      = ["eu-central-1a", "eu-central-1b", "eu-central-1c"]
 public_subnets_cidrs     = ["192.170.0.0/24", "192.170.1.0/24", "192.170.2.0/24"]
+ecs_tasks_execution_role="ecs_tasks_execution_role"

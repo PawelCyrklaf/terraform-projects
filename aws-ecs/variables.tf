@@ -64,3 +64,7 @@ variable "public_subnets_cidrs" {
   type = list(string)
   default = ["192.170.0.0/24", "192.170.1.0/24", "192.170.2.0/24"]
 }
+
+variable "ecs_tasks_execution_role" {
+  type = string
+}
